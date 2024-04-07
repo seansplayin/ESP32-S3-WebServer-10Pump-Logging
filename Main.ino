@@ -30,38 +30,35 @@ const int pumpPins[10] = {2, 42, 41, 40, 39, 38, 37, 36, 35, 0};
 void setup() {
    Serial.begin(115200);
     
-   setupRTC();
+   setupRTC(); // Initialize the DS3231 RTC, function in RTCManager.cpp file
   
-   setupNetwork();
+   setupNetwork(); // Initialize the W5500 Ethernet Adapter, function in NetworkManager.cpp file
      
-   initNTP();
+   initNTP(); // Connect to NTP server to retreve time and call 'tryNtpUpdate()' to Sync updated time to DS3231 RTC, function in TimeSync.cpp file
     
-   initializeTime(); // Initialize and obtain current time
+   initializeTime(); // Initialize and obtain current time, function in TimeSync.cpp file
    
-   initializeFileSystem(); // Initialize the file system
+   initializeFileSystem(); // Initialize the file system, function in FileSystemManager.cpp file
 
-   initializePumps();
+   initializePumps(); // Initialize pump relay array and set pins as outputs, function in PumpManager.cpp file
     
-   setupTimeSync(); // Set up time synchronization
-          
-   startServer(); // Initialize WebSocket and set up server routes
+   startServer(); // Initialize WebSocket and set up server routes, function in WebServerManager.cpp file
 
-   setupFirstPageRoutes(); // Setup routes and WebSocket for the first page
+   setupFirstPageRoutes(); // Setup routes and WebSocket for the first page, function in FirstWebpage.cpp file
 
-   setupSecondPageRoutes(); // Setup routes and WebSocket for the second page     
+   setupSecondPageRoutes(); // Setup routes and WebSocket for the second page, function in SecondWebpage.cpp file
    
-   setupLogDataRoute(); // Set up the route for AJAX requests for log data. used for graphs on second webpage
+   setupLogDataRoute(); // Set up the route for AJAX requests for log data. used for graphs on second webpage, function in SecondWebpage.cpp file
    
-   setupAutoModeChecking(); // This code performs a check ever 5 seconds to see if a simulated temperature value demands a pump state change. 
+   setupAutoModeChecking(); // This code performs a check ever 5 seconds to see if a simulated temperature value demands a pump state change, function in PumpManager.cpp file
 
-   dateTimeTicker(); // This function calls 'refreshCurrentTime()' every second which calls 'broadcastDateTime()' which gets the current time and then calls 'broadcastDateTime()' which formats the time and boradcasts it out on ws
+   dateTimeTicker(); // This function calls 'refreshCurrentTime()' which gets the current time and then calls 'broadcastDateTime()' which formats the time and boradcasts it out on ws, function in RTCManager.cpp file
 
   
    //setupPumpBroadcasting(); // Broadcasts the State and Mode of all 10 pumps to the Serial Monitor
 
    //setupTemperatureBroadcasting(); // Broadcasts current and threshold temperatures all 10 pumps to the Serial Monitor 
-    
-
+  
 }
 
 void loop() {
