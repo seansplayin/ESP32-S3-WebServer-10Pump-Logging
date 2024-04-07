@@ -91,9 +91,11 @@ void broadcastDateTime() {
 
 void refreshCurrentTime() {
     CurrentTime = rtc.now(); // Refresh the global CurrentTime variable
-    broadcastDateTime(); // formats time and then broadcasts through ws (websocket)
-    checkTimeAndAct(); // located in Logging.cpp
-    }
+    broadcastDateTime(); // Formats time and then broadcasts through ws (websocket)
+    checkTimeAndAct(); // Perform log aggregation if conditions are met
+    checkAndSyncTime(); // Check if it's time to sync with NTP
+}
+
 
 void dateTimeTicker() {
     dateTimeTickerObject.attach(1, refreshCurrentTime); // Use the Ticker object here
