@@ -11,7 +11,7 @@
 
 Ticker ntpRetryTicker;
 
-Ticker timeSyncTicker;
+
 
 extern DateTime CurrentTime;
 
@@ -21,16 +21,24 @@ unsigned long lastNtpUpdateAttempt = 0;
 const unsigned long ntpRetryInterval = 600000; // 10 minutes in milliseconds
 bool isNtpSyncDue = true;
 
-void setupTimeSync() {
-    timeSyncTicker.attach(86400, []() { // Daily re-sync
-        needToSyncTime = true;
-    });
+
+
+// if time sync has not been done today it will sync at 3AM. this is called every second from refreshCurrentTime() in RTCManager.cpp
+void checkAndSyncTime() {
+    DateTime now = CurrentTime; // Assume CurrentTime is up to date
+    // Check if it's 3 AM and if the last sync was not today
+    static DateTime lastSyncDate;
+    if (now.hour() == 3 && now.minute() == 0 && (lastSyncDate.day() != now.day() || lastSyncDate.month() != now.month() || lastSyncDate.year() != now.year())) {
+        // Trigger NTP sync
+        initNTP();
+        lastSyncDate = now; // Update last sync date
+    }
 }
 
  
 // this is called in setup to connect to the NTP server
 void initNTP() {
-    Serial.print(" Starting NTP time sync ");
+    Serial.print("Starting NTP time sync ");
     configTime(-6 * 3600, 0, "pool.ntp.org", "time.nist.gov", "MST7MDT");
     tryNtpUpdate(); // Attempt to update NTP time immediately
 }
