@@ -9,7 +9,7 @@ void initNTP();
 void tryNtpUpdate();
 void printCurrentRtcTime();
 void initializeTime();
-
+void checkAndSyncTime();
 
 extern bool needToSyncTime;
 extern bool needNtpSync;
