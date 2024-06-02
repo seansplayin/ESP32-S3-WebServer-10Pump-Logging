@@ -10,26 +10,21 @@
 #include "FileSystemManager.h"
 #include "FirstWebpage.h"
 #include "SecondWebpage.h"
+#include "TaskManager.h"
 
-// Ethernet adapter (W5500) pin configurations
-const int W5500_MOSI = 11;
-const int W5500_MISO = 13;
-const int W5500_SCK = 12;
-const int W5500_SS = 10;
-const int W5500_INT = 4;
 
-// RTC DS3231
-RTC_DS3231 rtc;
-const int pinSDA = 20;
-const int pinSCL = 21;
-const int sqwPin = 47; // GPIO pin connected to DS3231 SQW
 
-const int pumpPins[10] = {2, 42, 41, 40, 39, 38, 37, 36, 35, 0};
+
+
+
 
 
 void setup() {
    Serial.begin(115200);
-    
+   
+   startAllTasks();  // This function starts all the tasks you've defined
+
+   /* 
    setupRTC(); // Initialize the DS3231 RTC, function in RTCManager.cpp file
   
    setupNetwork(); // Initialize the W5500 Ethernet Adapter, function in NetworkManager.cpp file
@@ -48,13 +43,14 @@ void setup() {
 
    setupSecondPageRoutes(); // Setup routes and WebSocket for the second page, function in SecondWebpage.cpp file
    
-   setupLogDataRoute(); // Set up the route for AJAX requests for log data. used for graphs on second webpage, function in SecondWebpage.cpp file
+   setupLogDataRoute(); // Set up the route for AJAX requests for log data. used for graphs on second webpage, function in WebServerManager.cpp file
    
    dateTimeTicker(); // calls 'refreshCurrentTime()' which calls 'broadcastDateTime()' to broadcast time on ws, Also calls 'executeEverySecond' which calls 'executecheckTimeAndAct()', 'checkAndSyncTime()', executecheckAutoModeConditions(); function in RTCManager.cpp file
   
    //setupPumpBroadcasting(); // Broadcasts the State and Mode of all 10 pumps to the Serial Monitor
 
    //setupTemperatureBroadcasting(); // Broadcasts current and threshold temperatures all 10 pumps to the Serial Monitor 
+  */
   
 }
 

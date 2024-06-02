@@ -176,18 +176,24 @@ unsigned long calculateTotalLogRuntime(const String& logFilename) {
 
     while (logFile.available()) {
         String line = logFile.readStringUntil('\n');
-        // Check for START or STOP events and parse the datetime
         if (line.startsWith("START")) {
-            String timestampStr = line.substring(6); // Adjust based on your log format
-            lastStartTime = parseDateTimeFromLogFile(timestampStr);
+            lastStartTime = parseDateTimeFromLogFile(line.substring(6));
             isPumpRunning = true;
-        } else if (line.startsWith("STOP") && isPumpRunning) {
-            String timestampStr = line.substring(5); // Adjust based on your log format
-            DateTime stopTime = parseDateTimeFromLogFile(timestampStr);
-            totalRuntime += (stopTime.unixtime() - lastStartTime.unixtime());
-            isPumpRunning = false;
+        } else if (line.startsWith("STOP")) {
+            DateTime stopTime = parseDateTimeFromLogFile(line.substring(5));
+            if (isPumpRunning) {
+                totalRuntime += (stopTime.unixtime() - lastStartTime.unixtime());
+                isPumpRunning = false;
+            }
         }
     }
+
+    // Add the elapsed time since the last "START" event to totalRuntime if the pump is still running
+    if (isPumpRunning) {
+        DateTime currentTime = rtc.now();
+        totalRuntime += (currentTime.unixtime() - lastStartTime.unixtime());
+    }
+
     logFile.close();
     return totalRuntime;
 }

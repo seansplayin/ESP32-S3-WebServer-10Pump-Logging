@@ -473,7 +473,7 @@ void checkTimeAndAct() {
     if (CurrentTime.hour() == 23 && CurrentTime.minute() == 59) {
       setElapsed_Day();  
     } 
-    if (CurrentTime.hour() == 0 && CurrentTime.minute() == 0) {
+    if (CurrentTime.hour() == 00 && CurrentTime.minute() == 01) {
      setperformLogAggregation();   
     }
 }

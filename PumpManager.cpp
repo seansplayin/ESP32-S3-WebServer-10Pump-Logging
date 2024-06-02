@@ -6,6 +6,9 @@
 
 #include <Ticker.h>
 
+// Pump Pin Declarations
+const int pumpPins[10] = {2, 42, 41, 40, 39, 38, 37, 36, 35, 0};
+
 int pumpModes[10] = {PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO, PUMP_AUTO};
 int pumpStates[10] = {PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF, PUMP_OFF};
 

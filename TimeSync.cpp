@@ -23,15 +23,17 @@ bool isNtpSyncDue = true;
 
 
 
-// if time sync has not been done today it will sync at 3AM. this is called every second from refreshCurrentTime() in RTCManager.cpp
+// if time sync has not been done today it will sync at 3AM. this is called every second from task TaskcheckAndSyncTime
 void checkAndSyncTime() {
     DateTime now = CurrentTime; // Assume CurrentTime is up to date
     // Check if it's 3 AM and if the last sync was not today
     static DateTime lastSyncDate;
-    if (now.hour() == 3 && now.minute() == 0 && (lastSyncDate.day() != now.day() || lastSyncDate.month() != now.month() || lastSyncDate.year() != now.year())) {
+    if (now.hour() == 3 && now.minute() == 00 && (lastSyncDate.day() != now.day() || lastSyncDate.month() != now.month() || lastSyncDate.year() != now.year())) {
         // Trigger NTP sync
+        Serial.print("3AM, calling initNTP to initiate NTP time sync");
         initNTP();
         lastSyncDate = now; // Update last sync date
+        
     }
 }
 

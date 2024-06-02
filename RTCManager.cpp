@@ -9,10 +9,13 @@
 #include <Wire.h>
 #include <Ticker.h>
 
-extern RTC_DS3231 rtc;
-extern const int pinSDA;
-extern const int pinSCL;
-extern const int sqwPin;
+
+// RTC DS3231
+RTC_DS3231 rtc;
+const int pinSDA = 20;
+const int pinSCL = 21;
+const int sqwPin = 47; // GPIO pin connected to DS3231 SQW
+
 
 DateTime CurrentTime; // This holds the current time updated periodically
 
@@ -90,19 +93,13 @@ void broadcastDateTime() {
     ws.textAll(buffer);
 }
 
-void executeEverySecond() {
-    checkTimeAndAct(); // Perform log aggregation if conditions are met
-    checkAndSyncTime(); // Check if it's time to sync with NTP
-    executecheckAutoModeConditions(); // checkes auto mode conditions for each pump in PumpManager.cpp
-}
 
 void refreshCurrentTime() {
     CurrentTime = rtc.now(); // Refresh the global CurrentTime variable
     broadcastDateTime(); // Formats time and then broadcasts through ws (websocket)
-    executeEverySecond(); // Function dedicated to executing tasks every second
-}
+    }
 
-
+// not used since we inmplemented tasks
 void dateTimeTicker() {
     dateTimeTickerObject.attach(1, refreshCurrentTime); // Use the Ticker object here
 }

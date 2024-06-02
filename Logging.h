@@ -19,7 +19,7 @@ void aggregateMonthlyToYearlyLogs(int pumpIndex);
 void performLogAggregation();
 //void parseDateTimeFromLog();
 //void calculateTotalRuntime();
-void checkTimeAndAct(); // gets called in refreshCurrentTime() function in RTCManager.cpp 
+void checkTimeAndAct(); 
 
 
 unsigned long extractRuntimeFromLogLine(String line);

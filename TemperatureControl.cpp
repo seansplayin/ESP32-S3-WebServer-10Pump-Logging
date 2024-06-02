@@ -42,3 +42,7 @@ void broadcastTemperatures() {
     Serial.println(); // Print a blank line
     broadcastMessageOverWebSocket(message);
 }
+
+void updateTemperatures() {
+//Serial.print("Temperatures");
+}

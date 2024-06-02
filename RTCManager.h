@@ -14,7 +14,7 @@ String getRtcTimeString();
 
 int getCurrentYear();
 String getCurrentDateStringMDY();
-
+void refreshCurrentTime();
 extern RTC_DS3231 rtc;
 
 void dateTimeTicker();

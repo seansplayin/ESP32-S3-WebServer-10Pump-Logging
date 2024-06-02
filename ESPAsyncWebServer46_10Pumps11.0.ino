@@ -1,45 +1,13 @@
-# ESP32-S3-AsyncWebServer-10Pump-Logging
-
-*potential uses*
-
-Control up to 10 relays from a webpage, view current relay states and select relay modes (on, off, auto). 
-- Add temperature sensors (ds18b20 or thermistors) and control up to 10 zones of infloor radiant heat using "zone valves" or forced air heat using "dampers".  
-
-
-*Overview*
-
-This Arduino IDE project uses a W5500 Ethernet adapter connected to the ESP32-S3-DevkitC-1 mcu for network connectivity. 
-Controller hosts a multi client asynchronously updated web server with the first webpage displaying the state of all 10 pumps (relays/ output pins) using websocket and a user selectable mode changer (Auto, On, Off).
-These output pins can be easily and individually configured on=high/off=low or on=low/off=high to suite your application. (LED typically configures as on=high/off=low and relays can be configured as on=low/off=high or 
-on=High/off=Low)
-System utilizes a DS3231 RTC that is synchronized with NTP -6 (MST7MDT) on startup and every day at 3AM. 
-System time is broadcast every second through websocket and 'CurrentTime' is available system wide to reduce duplication of RTC calls rtc.now() to the DS3231 and to ensure all times are in sync. 
-System uses littlefs to hold favicon icons and all logs.
-Implemented full logging system to track pump run times on a per day, month, year basis along with a logging scheme that avoids increasing log file sizes except for a single line added every year for the yearly total. 
-The functions that start and stop the pumps also creates a log file if it doesn't exist whith a name that corresponding to the pump ie. pump1 is logged in pump1_Log.txt and then logs the start and stop events with a 
-timestamp.
-at midnight a function is called that aggregates the runtimes from the pumpX_Logs.txt and records into the pumpX_Daily.txt logs and then clears/deletes the source pumpX_Logs.txt files 
-If it is the first day of the mnonth an additional log aggregation function will called that aggregates the runtimes from pumpX_Daily.txt logs into pumpX_Monthly.txt logs and then deletes the source pumpX_Daily.txt logs. 
-If it's the first day of the year an additional log aggregation function is called that aggregates the runtimes from the pumpX_Monthly.txt logs into the pumpX_Yearly.txt logs and deletes the source pumpXMonthly.txt logs. 
-A second webpage is available at /second-page where elapsed pump runtimes can be viewed for the current day, month, year, total 
-For organization code is split up into many separate files based on function
-
-Type "list files" into serial input to display contents of LittleFS file system
-
-
-*Version History*
-
-06-02-24: github version incremented from v10.5 to v11
-
-// ESPAsyncWebServer46-10Pumps7.6 : working : Webserver, pumps On/Off,Auto with simulated temperature T,1,25, NTP>RTC sync. 
-// ESPAsyncWebServer46-10Pumps7.6 : RTC is no longer updated if NTP update fails. NTP function "void initNTP()" 
-// now updateds RTC but not if NTP update fails and logging will continue using the time inside the DS3231 RTC. 
-// ESPAsyncWebServer46-10Pumps7.6 : transfered RTClib-NTP_Sync4 code to ESPAsyncWebServer46-10Pumps7.6. 
-// ESPAsyncWebServer46-10Pumps7.6 : Removed duplicate logging functions, 'logPumpStart(pumpIndex);' and 'logPumpStop(pumpIndex);' and now logPumpEvent function does both when 
-// specifying "START" or "STOP".  
-// ESPAsyncWebServer46-10Pumps7.6 : replaced calls for 'logPumpStart(pumpIndex);' and 'logPumpStop(pumpIndex);' in 'setPumpState' function with 'logPumpEvent(pumpIndex, "START");' and 'logPumpEvent(pumpIndex, "STOP");'
-// ESPAsyncWebServer46-10Pumps7.6 : Verified log files for pumps
-
+// list logs, read log "filename"
+// partition.csv edited to 1.2 mb for each app partition and 
+// working : Webserver, pumps On/Off,Auto with simulated temperature T,1,25, NTP>RTC sync. 
+// transfered RTClib-NTP_Sync4 code to ESPAsyncWebServer46-10Pumps7.6 
+// Removed duplicate logging functions, 'logPumpStart(pumpIndex);' and 'logPumpStop(pumpIndex);' and now logPumpEvent function does both when 
+// specifying "START" or "STOP".  replaced calls for 'logPumpStart(pumpIndex);' and 'logPumpStop(pumpIndex);' in 'setPumpState' function with
+// 'logPumpEvent(pumpIndex, "START");' and 'logPumpEvent(pumpIndex, "STOP");'
+// Verified log files for pumps
+// update ESPAsyncWebServer46-10Pumps7.6 : RTC is no longer updated if NTP update fails. NTP function "void initNTP()" 
+// now updateds RTC but not if NTP update fails and logging will continue using the time inside the DS3231 RTC.
 // ESPAsyncWebServer46-10Pumps7.7 : updated initNTP and tryNtpUpdate functions so no longer uses blocking code and 
 // the rest of the setup code can continue while the time attempts to sync. 
 // update ESPAsyncWebServer46-10Pumps7.8 : Code split up and put into siloh's. Logging is not adding timestamp
